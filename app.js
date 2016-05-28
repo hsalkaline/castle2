@@ -1,27 +1,35 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { reducer } from './reducers';
-import { endRound } from './actions';
+import {
+    beginRound,
+    endRound
+} from './actions';
 import Immutable from 'immutable';
 
 const initialState = Immutable.fromJS({
+    treasury: {
+        gold: 20
+    },
     players: [
         {
             color: 'red',
             resources: {
                 gold: 1
+            },
+            cards: {
+                hand: ['MESSENGER'],
+                discardPile: []
             }
         },
         {
             color: 'blue',
             resources: {
                 gold: 1
-            }
-        },
-        {
-            color: 'yellow',
-            resources: {
-                gold: 1
+            },
+            cards: {
+                hand: ['MESSENGER'],
+                discardPile: []
             }
         }
     ],
@@ -35,9 +43,7 @@ let store = createStore(
     applyMiddleware(thunk)
 );
 
-store.dispatch({
-    type: 'ROUND_BEGIN'
-});
+store.dispatch(beginRound());
 
 store.dispatch({
     type: 'PLAY_CARD',
