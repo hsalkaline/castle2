@@ -5,7 +5,8 @@ import thunk from 'redux-thunk';
 import { reducer } from 'reducers';
 import {
     beginRound,
-    endRound
+    endRound,
+    playCard
 } from 'actions';
 
 const initialState = Immutable.fromJS({
@@ -19,8 +20,8 @@ const initialState = Immutable.fromJS({
                 gold: 1
             },
             cards: {
-                hand: ['MESSENGER'],
-                discardPile: []
+                hand: Immutable.Set(['MESSENGER']),
+                discardPile: Immutable.Set([])
             }
         },
         {
@@ -29,8 +30,8 @@ const initialState = Immutable.fromJS({
                 gold: 1
             },
             cards: {
-                hand: ['MESSENGER'],
-                discardPile: []
+                hand: Immutable.Set(['MESSENGER']),
+                discardPile: Immutable.Set([])
             }
         }
     ],
@@ -46,18 +47,9 @@ let store = createStore(
 
 store.dispatch(beginRound());
 
-store.dispatch({
-    type: 'PLAY_CARD',
-    card: { type: 'MESSENGER' },
-    player: 'blue'
-});
+store.dispatch(playCard('blue', { type: 'MESSENGER' }));
+store.dispatch(playCard('red', { type: 'MESSENGER' }));
 
-store.dispatch({
-    type: 'PLAY_CARD',
-    card: { type: 'MESSENGER' },
-    player: 'red'
-});
-
-store.dispatch(endRound);
+store.dispatch(endRound());
 
 console.log(JSON.stringify(store.getState().toJS(), 2, 2));
