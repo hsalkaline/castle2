@@ -1,50 +1,31 @@
 import Immutable from 'immutable';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import logger from 'service/logger';
 
 import { reducer } from 'reducers';
 import {
+    startGame,
     beginRound,
     endRound,
     playCard
 } from 'actions';
 
-const initialState = Immutable.fromJS({
-    treasury: {
-        gold: 20
-    },
-    players: [
-        {
-            color: 'red',
-            resources: {
-                gold: 1
-            },
-            cards: {
-                hand: Immutable.Set(['MESSENGER']),
-                discardPile: Immutable.Set([])
-            }
-        },
-        {
-            color: 'blue',
-            resources: {
-                gold: 1
-            },
-            cards: {
-                hand: Immutable.Set(['MESSENGER']),
-                discardPile: Immutable.Set([])
-            }
-        }
-    ],
-    currentPlayer: 'red',
-    roundsRemains: 1
-});
-
 let store = createStore(
     reducer,
-    initialState,
+    Immutable.Map({}),
     applyMiddleware(thunk)
 );
 
+store.subscribe(() => {
+    const error = store.getState().get('error');
+    
+    if (error) {
+        throw JSON.stringify(error, 2, 2);
+    }
+});
+
+store.dispatch(startGame(['red', 'blue']));
 store.dispatch(beginRound());
 
 store.dispatch(playCard('blue', { type: 'MESSENGER' }));
