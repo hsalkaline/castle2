@@ -8,7 +8,8 @@ import {
     startGame,
     beginRound,
     endRound,
-    playCard
+    playCard,
+    placeTrader
 } from 'actions';
 
 let store = createStore(
@@ -29,7 +30,9 @@ store.dispatch(startGame(['red', 'blue']));
 store.dispatch(beginRound());
 
 store.dispatch(playCard('blue', { type: 'MESSENGER' }));
-store.dispatch(playCard('red', { type: 'MESSENGER' }));
+store.dispatch(playCard('red', { type: 'TRADER' }));
+
+store.dispatch(placeTrader('red', 'sand'));
 
 store.dispatch(endRound());
 
